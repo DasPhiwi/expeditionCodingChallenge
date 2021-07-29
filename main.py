@@ -85,7 +85,7 @@ def get_room_status():
     raspi_data = get_raspi_sensordata()
     live_data = get_live_data()
     live_time = datetime.fromtimestamp(live_data['samplingStartTime']).strftime("%d.%m.%Y %H:%M:%S")
-    high_powered_rooms = check_powerConsumption_per_room()
+    #high_powered_rooms = check_powerConsumption_per_room()
     rooms = []
     tvoc_outside = raspi_data["tvoc"]
     for room in live_data["rooms"]:
@@ -102,15 +102,13 @@ def get_room_status():
             messages.append("In diesem Raum sind sowohl Klimaanlage als auch Heizung an.")
         if room["sensors"]["windowsOpen"] and tvoc_outside > 400:
             messages.append("In diesem Raum sind die Fenster trotz erhöhter Schadstoffbelastung offen.")
-        for high_powered_room in high_powered_rooms:
-            if room["id"] == high_powered_room["id"]:
-                messages.append("In diesem Raum ist der Energieverbrauch um "
-                                + str(high_powered_room["difference"] + "W höher als erwartet."))
-                break
+       # for high_powered_room in high_powered_rooms:
+        #    if room["id"] == high_powered_room["id"]:
+        #        messages.append("In diesem Raum ist der Energieverbrauch um "
+         #                       + str(high_powered_room["difference"] + "W höher als erwartet."))
+        #        break
         room_copy = room.copy()
         room_copy["status"] = messages
         rooms.append(room_copy)
 
     return rooms, live_data, raspi_data, live_time
-
-json_to_data()
