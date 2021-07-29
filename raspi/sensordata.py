@@ -1,3 +1,5 @@
+import time
+
 from pigpio_dht import DHT11, DHT22
 import ccs811LIBRARY
 from datetime import datetime
@@ -33,19 +35,23 @@ class SensorData:
 
     def thread_update_sensordata(self):
         while True:
-            self.time = datetime.now()
-            if self.sensorCCS811.data_available():
-                self.sensorCCS811.read_logarithm_results()
-                self.co2 = self.sensorCCS811.CO2
-                self.tvoc = self.sensorCCS811.tVOC
-            elif self.sensorCCS811.check_for_error():
-                self.sensorCCS811.print_error()
+            try:
+                self.time = datetime.now()
+                if self.sensorCCS811.data_available():
+                    self.sensorCCS811.read_logarithm_results()
+                    self.co2 = self.sensorCCS811.CO2
+                    self.tvoc = self.sensorCCS811.tVOC
+                elif self.sensorCCS811.check_for_error():
+                    self.sensorCCS811.print_error()
 
-            dht22_result = self.sensorDHT22.read()
-            while not dht22_result["valid"]:
                 dht22_result = self.sensorDHT22.read()
+                while not dht22_result["valid"]:
+                    dht22_result = self.sensorDHT22.read()
 
-            self.temp = dht22_result['temp_c']
-            self.humidity = dht22_result['humidity']
+                self.temp = dht22_result['temp_c']
+                self.humidity = dht22_result['humidity']
+            except:
+                print("Error reading sensor, retrying.")
+                time.sleep(1)
 
 
