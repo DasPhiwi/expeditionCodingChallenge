@@ -103,8 +103,8 @@ def get_room_status():
             messages.append("In diesem Raum sind sowohl Klimaanlage als auch Heizung an.")
         if room["sensors"]["windowsOpen"] and room["sensors"]["heaterRunning"]:
             messages.append("In diesem Raum sind sowohl Fenster offen als auch Heizung an.")
-        if room["sensors"]["windowsOpen"] and room["sensors"]["heaterRunning"]:
-            messages.append("In diesem Raum sind sowohl Klimaanlage als auch Heizung an.")
+        if room["sensors"]["windowsOpen"] and room["sensors"]["airConditioningRunning"]:
+            messages.append("In diesem Raum sind sowohl Fenster offen als auch Klimaanlage an.")
         if room["sensors"]["windowsOpen"] and tvoc_outside > 400:
             messages.append("In diesem Raum sind die Fenster trotz erhöhter Schadstoffbelastung offen.")
         for high_powered_room in high_powered_rooms:
